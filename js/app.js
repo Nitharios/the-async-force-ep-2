@@ -22,7 +22,6 @@ console.log('Sanity Check: The Async Force Episode 2');
   }
 
   // opens the request for the data from the provided URL
-  // passes in the type and id selected to requestListener
   function retrieveAPI(url) {
     let apiRequest = new XMLHttpRequest();
     apiRequest.addEventListener("load", requestListener());
@@ -41,7 +40,7 @@ console.log('Sanity Check: The Async Force Episode 2');
 
   // handles converting data from returned document
   function dataConverter(document) {
-    console.log(document[typeSelected]);
+    // this is a link
     retrieveAPI(document[typeSelected]);
   }
 

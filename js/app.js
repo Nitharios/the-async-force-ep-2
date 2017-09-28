@@ -1,5 +1,6 @@
 // jshint esversion:6
-
+// DOCUMENT ARRAYS ARE SPLIT INTO PAGES
+// if Id > 9 ...
 console.log('Sanity Check: The Async Force Episode 2');
 
 (function episodeTwo() {
@@ -41,6 +42,7 @@ console.log('Sanity Check: The Async Force Episode 2');
   // handles converting data from returned document
   function dataConverter(document) {
     // this is a link
+    console.log(document[typeSelected]);  
     retrieveAPI(document[typeSelected]);
   }
 

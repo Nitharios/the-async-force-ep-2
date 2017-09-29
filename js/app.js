@@ -2,6 +2,7 @@
 // DOCUMENT ARRAYS ARE SPLIT INTO PAGES
 // if Id > 9 ...
 console.log('Sanity Check: The Async Force Episode 2');
+const working = 'It works!';
 
 (function episodeTwo() {
 
@@ -34,16 +35,72 @@ console.log('Sanity Check: The Async Force Episode 2');
   function requestListener() {
     return function() {
       let parsedDocument = JSON.parse(this.responseText);
-      console.log(parsedDocument);
       dataConverter(parsedDocument);
     };
   }
 
   // handles converting data from returned document
-  function dataConverter(document) {
+  function dataConverter(info) {
     // this is a link
-    console.log(document[typeSelected]);  
-    retrieveAPI(document[typeSelected]);
+    console.log(info);
+    let currentUrl = info[typeSelected];
+    console.log(currentUrl);  
+
+    // if there is a results key in the object, this will trigger
+    if (info.results) {
+      console.log(working);
+      // need to handle the multiple pages issue
+
+      // pass in the correct array to the appropriate function
+
+    // else it must be a link
+    } else {
+      retrieveAPI(currentUrl);
+    }
+  }
+
+  // data is an array passed in the the dataConverter function
+  // handles the 'person' option
+  function getPerson(arr) {
+    let nameElement = document.createElement('h2');
+    let genderElement = document.createElement('p');
+    let speciesElement = document.createElement('p');
+
+    let name = arr[idSelected].name;
+    let gender = arr[idSelected].gender;
+    // this is a link
+    let species = arr[idSelected].species;
+
+  }
+
+  // handles the 'planet' option
+  function getPlanet(arr) {
+    let nameElement = document.createElement('h2');
+    let terrainElement = document.createElement('p');
+    let populationElement = document.createElement('p');
+    let filmList = document.createElement('ul');
+    let filmsElement = document.createElement('li');
+
+    let name = arr[idSelected].name;
+    let terrain = arr[idSelected].terrain;
+    let population = arr[idSelected].population;
+    // this is a link
+    let films = arr[idSelected].films;
+  }
+
+  // handles the 'starship' option
+  function getStarship(arr) {
+    let nameElement = document.createElement('h2');
+    let manufacturerElement = document.createElement('p');
+    let starshipClassElement = document.createElement('p');
+    let filmsList = document.createElement('ul');
+    let filmsElement = document.createElement('li');
+
+    let name = arr[idSelected].name;
+    let manufacturer = arr[idSelected].manufacturer;
+    let starshipClass = arr[idSelected].starship_class;
+    // this is a link
+    let films = arr[idSelected].films;
   }
 
 })();

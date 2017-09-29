@@ -53,6 +53,10 @@ const working = 'It works!';
 
       // pass in the correct array to the appropriate function
 
+    // else it might be a movie title
+    } else if (info[title] || info[name]) {
+      return info[title] || info[name];
+
     // else it must be a link
     } else {
       retrieveAPI(currentUrl);
@@ -69,7 +73,7 @@ const working = 'It works!';
     let name = arr[idSelected].name;
     let gender = arr[idSelected].gender;
     // this is a link
-    let species = arr[idSelected].species;
+    let species = retrieveAPI(arr[idSelected].species);
 
   }
 
@@ -85,7 +89,7 @@ const working = 'It works!';
     let terrain = arr[idSelected].terrain;
     let population = arr[idSelected].population;
     // this is a link
-    let films = arr[idSelected].films;
+    let films = retrieveAPI(arr[idSelected].films);
   }
 
   // handles the 'starship' option
@@ -100,7 +104,7 @@ const working = 'It works!';
     let manufacturer = arr[idSelected].manufacturer;
     let starshipClass = arr[idSelected].starship_class;
     // this is a link
-    let films = arr[idSelected].films;
+    let films = retrieveAPI(arr[idSelected].films);
   }
 
 })();

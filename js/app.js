@@ -73,23 +73,24 @@ const working = 'It works!';
   // data is passed in as an array
   // all name tags will appear in an h2 tag
   function generateName(array) {
-    let name = document.createElement('h2');
-    name.class = 'name';
-    name.innerHTML = array[idSelected].name;
-    return name;
+    let nameElement = document.createElement('h2');
+    nameElement.class = 'name';
+    nameElement.innerHTML = array[idSelected].name;
+    return nameElement;
   }
 
   // details are placed in a p tag
   // gender is in the same array as name
   // species is an array of links --> array.species[0];
   function generateDetails(array, trait) {
-    let detail = document.createElement('p');
+    let detail = array[idSelected][trait];
+    let detailElement = document.createElement('p');
     
     if (trait === 'gender') {
-      detail.class = trait;
-      detail.innerHTML = array[idSelected][trait];
-      return detail;
-    }
+      detailElement.class = trait;
+      detailElement.innerHTML = array[idSelected][trait];
+      return detailElement;
+    } 
   }
 
 

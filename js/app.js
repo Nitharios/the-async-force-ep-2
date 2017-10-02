@@ -14,11 +14,14 @@ const working = 'It works!';
   let typeSelected, 
       idSelected;
 
+  ///// ASYNC HANDLING FUNCTIONS /////
+
   // resourceType.addEventListener("change", resourceSelector);
   requestResourceButton.addEventListener("click", resourceSelector);
 
   // selects the option taken by user
   function resourceSelector() {
+    contentContainer.innerHTML = '';
     typeSelected = document.getElementById("resourceType").value;
     idSelected = document.getElementById("resourceId").value;
     retrieveAPI("https://swapi.co/api/");
@@ -33,14 +36,76 @@ const working = 'It works!';
   }
 
   // parses JSON document and returns data
-  function requestListener() {
+  function requestListener() { // this is the event handler
     return function() {
       let parsedDocument = JSON.parse(this.responseText);
-      dataConverter(parsedDocument);
+      console.log('parsed:', parsedDocument);
+
+      // if the document has the typeSelected links, it needs to be re-passed through requestListener
+      if (parsedDocument.results || parsedDocument.name || parsedDocument.title) {
+        informationSorter(parsedDocument);
+      
+      } else {
+        retrieveAPI(parsedDocument[typeSelected]);
+
+      }
     };
   }
 
-  // handles converting data from returned document
+  ///// SYNC HANDLING FUNCTIONS //////
+
+  // 
+  function informationSorter(data) {
+    // if the data has a results key, it must contain the name data
+    if (data.results) {
+      let results = data.results;
+      contentContainer.appendChild(generateNameElement(results, 'name'));
+
+      if (typeSelected === "people") {      
+        contentContainer.appendChild(generateDetailElement(results, 'gender'));
+        retrieveAPI(results[idSelected].species);
+      }
+    
+    } else if (data.name) {
+      contentContainer.appendChild(generateDetailElement(data));
+
+    }
+  }
+
+  //
+  function generateNameElement(data, trait) {
+    let nameElement = document.createElement('h2');
+
+    nameElement.class = trait;
+    nameElement.innerHTML = data[idSelected][trait];
+    return nameElement;    
+  }
+
+  // details are placed in a p tag
+  // gender is in the same array as name
+  // species is an array of links --> array.species[0];
+  function generateDetailElement(data, trait) {
+    let detailElement = document.createElement('p');
+    detailElement.class = trait;
+
+    if (data[idSelected]) {
+      let detail = data[idSelected][trait];
+      detailElement.innerHTML = data[idSelected][trait];
+
+    } else if (data.name) {
+      detailElement.innerHTML = data.name;
+
+    } else if (data.title) {
+      detailElement.innerHTML = data.title;
+    
+    }
+
+    return detailElement;
+  }
+
+})(window);
+
+/*  // handles converting data from returned document
   function dataConverter(datafile) {
     // this is a link
     console.log(datafile);
@@ -64,6 +129,8 @@ const working = 'It works!';
     } else if (datafile.title || datafile.name) {
       console.log(datafile.title || 'not title!');
       console.log(datafile.name || 'not name!');
+
+      return datafile.name;
 
     // else it must be a link
     } else {
@@ -96,18 +163,16 @@ const working = 'It works!';
       console.log('hit', detail[0]);
       // this is failing because of async...
       // the async is called but the appendChild method is running sync
-      retrieveAPI(detail[0]);
+      detailElement.class = trait;
+      detailElement.innerHTML = retrieveAPI(detail[0]);
+      return detailElement;
 
     } else {
       detailElement.class = trait;
       detailElement.innerHTML = detail;
       return detailElement;
     } 
-  }
-
-
-
-})(window);
+  }*/
 
   // handles the 'person' option
   // function getPerson(arr) {

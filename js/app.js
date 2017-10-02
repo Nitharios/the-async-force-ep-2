@@ -67,13 +67,18 @@ const sanity = "You're not insane!";
       } else if (typeSelected === 'planets') {
         contentContainer.appendChild(generateDetailElement(results, 'terrain'));
         contentContainer.appendChild(generateDetailElement(results, 'population'));
+        generateListElement(results, 'films');
 
       } else if (typeSelected === 'starships') {
         contentContainer.appendChild(generateDetailElement(results, 'manufacturer'));
         contentContainer.appendChild(generateDetailElement(results, 'starship_class'));
+        generateListElement(results, 'films');
       }
     
     } else if (data.name) {
+      contentContainer.appendChild(generateDetailElement(data));
+
+    } else if (data.title) {
       contentContainer.appendChild(generateDetailElement(data));
 
     }
@@ -85,7 +90,7 @@ const sanity = "You're not insane!";
 
     nameElement.class = trait;
     nameElement.innerHTML = data[idSelected][trait];
-    
+
     return nameElement;    
   }
 
@@ -102,9 +107,26 @@ const sanity = "You're not insane!";
 
     } else if (data.name) {
       detailElement.innerHTML = data.name;
+    
+    } else if (data.title) {
+      detailElement = document.createElement('li');
+      detailElement.innerHTML = data.title;
+      console.log(detailElement);
+
     }
 
     return detailElement;
+  }
+
+  // passes in an array 'results' and the films array trait I suppose
+  // films use 'title'
+  // needs li tags wrapped in ul
+  function generateListElement(data, trait) {
+    let dataList = data[idSelected][trait];
+
+    for (let i = 0; i < data.length; i++) {
+      retrieveAPI(dataList[i]);
+    }
   }
 
 })(window);

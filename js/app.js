@@ -2,7 +2,7 @@
 // DOCUMENT ARRAYS ARE SPLIT INTO PAGES
 // if Id > 9 ...
 console.log('Sanity Check: The Async Force Episode 2');
-const working = 'It works!';
+const sanity = "You're not insane!";
 
 (function episodeTwo() {
 
@@ -11,8 +11,7 @@ const working = 'It works!';
   const requestResourceButton = document.getElementById("requestResourceButton");
   const contentContainer = document.getElementById('contentContainer');
   
-  let typeSelected, 
-      idSelected;
+  let typeSelected, idSelected;
 
   ///// ASYNC HANDLING FUNCTIONS /////
 
@@ -64,6 +63,14 @@ const working = 'It works!';
       if (typeSelected === "people") {      
         contentContainer.appendChild(generateDetailElement(results, 'gender'));
         retrieveAPI(results[idSelected].species);
+      
+      } else if (typeSelected === 'planets') {
+        contentContainer.appendChild(generateDetailElement(results, 'terrain'));
+        contentContainer.appendChild(generateDetailElement(results, 'population'));
+
+      } else if (typeSelected === 'starships') {
+        contentContainer.appendChild(generateDetailElement(results, 'manufacturer'));
+        contentContainer.appendChild(generateDetailElement(results, 'starship_class'));
       }
     
     } else if (data.name) {
@@ -78,6 +85,7 @@ const working = 'It works!';
 
     nameElement.class = trait;
     nameElement.innerHTML = data[idSelected][trait];
+    
     return nameElement;    
   }
 
@@ -94,125 +102,9 @@ const working = 'It works!';
 
     } else if (data.name) {
       detailElement.innerHTML = data.name;
-
-    } else if (data.title) {
-      detailElement.innerHTML = data.title;
-    
     }
 
     return detailElement;
   }
 
 })(window);
-
-/*  // handles converting data from returned document
-  function dataConverter(datafile) {
-    // this is a link
-    console.log(datafile);
-    let currentUrl = datafile[typeSelected];
-    console.log('url', currentUrl);  
-
-    // if there is a results key in the object, this will trigger
-    if (datafile.results) {
-      let results = datafile.results;
-
-      console.log('requested:', results[idSelected].name);
-      contentContainer.appendChild(generateName(results));
-      contentContainer.appendChild(generateDetails(results, 'gender'));
-      contentContainer.appendChild(generateDetails(results, 'species'));
-
-      // need to handle the multiple pages issue
-
-      // pass in the correct array to the appropriate function
-
-    // else it might be a movie title or species name
-    } else if (datafile.title || datafile.name) {
-      console.log(datafile.title || 'not title!');
-      console.log(datafile.name || 'not name!');
-
-      return datafile.name;
-
-    // else it must be a link
-    } else {
-      retrieveAPI(currentUrl);
-    }
-  }
-
-  // data is passed in as an array
-  // all name tags will appear in an h2 tag
-  function generateName(array) {
-    let nameElement = document.createElement('h2');
-
-    nameElement.class = 'name';
-    nameElement.innerHTML = array[idSelected].name;
-    return nameElement;
-  }
-
-  // details are placed in a p tag
-  // gender is in the same array as name
-  // species is an array of links --> array.species[0];
-  function generateDetails(array, trait) {
-    let detail = array[idSelected][trait];
-    console.log('detail: ', detail);
-    let detailElement = document.createElement('p');
-    
-    if (!trait) {
-      return 'No trait specified';
-    // if this else if triggers the detail must be a url
-    } else if (Array.isArray(detail)) {
-      console.log('hit', detail[0]);
-      // this is failing because of async...
-      // the async is called but the appendChild method is running sync
-      detailElement.class = trait;
-      detailElement.innerHTML = retrieveAPI(detail[0]);
-      return detailElement;
-
-    } else {
-      detailElement.class = trait;
-      detailElement.innerHTML = detail;
-      return detailElement;
-    } 
-  }*/
-
-  // handles the 'person' option
-  // function getPerson(arr) {
-  //   let nameElement = document.createElement('h2');
-  //   let genderElement = document.createElement('p');
-  //   let speciesElement = document.createElement('p');
-
-  //   let name = arr[idSelected].name;
-  //   let gender = arr[idSelected].gender;
-  //   // this is a link
-  //   let species = retrieveAPI(arr[idSelected].species);
-
-  // }
-  // // handles the 'planet' option
-  // function getPlanet(arr) {
-  //   let nameElement = document.createElement('h2');
-  //   let terrainElement = document.createElement('p');
-  //   let populationElement = document.createElement('p');
-  //   let filmList = document.createElement('ul');
-  //   let filmsElement = document.createElement('li');
-
-  //   let name = arr[idSelected].name;
-  //   let terrain = arr[idSelected].terrain;
-  //   let population = arr[idSelected].population;
-  //   // this is a link
-  //   let films = retrieveAPI(arr[idSelected].films);
-  // }
-
-  // // handles the 'starship' option
-  // function getStarship(arr) {
-  //   let nameElement = document.createElement('h2');
-  //   let manufacturerElement = document.createElement('p');
-  //   let starshipClassElement = document.createElement('p');
-  //   let filmsList = document.createElement('ul');
-  //   let filmsElement = document.createElement('li');
-
-  //   let name = arr[idSelected].name;
-  //   let manufacturer = arr[idSelected].manufacturer;
-  //   let starshipClass = arr[idSelected].starship_class;
-  //   // this is a link
-  //   let films = retrieveAPI(arr[idSelected].films);
-  //   console.log(films);
-  // }

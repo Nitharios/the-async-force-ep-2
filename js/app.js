@@ -54,15 +54,16 @@ const working = 'It works!';
       console.log('requested:', results[idSelected].name);
       contentContainer.appendChild(generateName(results));
       contentContainer.appendChild(generateDetails(results, 'gender'));
+      contentContainer.appendChild(generateDetails(results, 'species'));
 
       // need to handle the multiple pages issue
 
       // pass in the correct array to the appropriate function
 
-    // else it might be a movie title
+    // else it might be a movie title or species name
     } else if (datafile.title || datafile.name) {
-      console.log(datafile.title || 'not working!');
-      return datafile.title || datafile.name;
+      console.log(datafile.title || 'not title!');
+      console.log(datafile.name || 'not name!');
 
     // else it must be a link
     } else {
@@ -74,6 +75,7 @@ const working = 'It works!';
   // all name tags will appear in an h2 tag
   function generateName(array) {
     let nameElement = document.createElement('h2');
+
     nameElement.class = 'name';
     nameElement.innerHTML = array[idSelected].name;
     return nameElement;
@@ -84,11 +86,21 @@ const working = 'It works!';
   // species is an array of links --> array.species[0];
   function generateDetails(array, trait) {
     let detail = array[idSelected][trait];
+    console.log('detail: ', detail);
     let detailElement = document.createElement('p');
     
-    if (trait === 'gender') {
+    if (!trait) {
+      return 'No trait specified';
+    // if this else if triggers the detail must be a url
+    } else if (Array.isArray(detail)) {
+      console.log('hit', detail[0]);
+      // this is failing because of async...
+      // the async is called but the appendChild method is running sync
+      retrieveAPI(detail[0]);
+
+    } else {
       detailElement.class = trait;
-      detailElement.innerHTML = array[idSelected][trait];
+      detailElement.innerHTML = detail;
       return detailElement;
     } 
   }

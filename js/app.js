@@ -10,6 +10,7 @@ const sanity = "You're not insane!";
   const resourceId = document.getElementById("resourceId");
   const requestResourceButton = document.getElementById("requestResourceButton");
   const contentContainer = document.getElementById('contentContainer');
+  const unorderedListElement = document.createElement('ul');
   
   let typeSelected, idSelected;
 
@@ -67,19 +68,25 @@ const sanity = "You're not insane!";
       } else if (typeSelected === 'planets') {
         contentContainer.appendChild(generateDetailElement(results, 'terrain'));
         contentContainer.appendChild(generateDetailElement(results, 'population'));
+
+        unorderedListElement.innerHTML = '';
         generateListElement(results, 'films');
+        contentContainer.appendChild(unorderedListElement);
 
       } else if (typeSelected === 'starships') {
         contentContainer.appendChild(generateDetailElement(results, 'manufacturer'));
         contentContainer.appendChild(generateDetailElement(results, 'starship_class'));
+
+        unorderedListElement.innerHTML = '';
         generateListElement(results, 'films');
+        contentContainer.appendChild(unorderedListElement);
       }
     
     } else if (data.name) {
       contentContainer.appendChild(generateDetailElement(data));
 
     } else if (data.title) {
-      contentContainer.appendChild(generateDetailElement(data));
+      unorderedListElement.appendChild(generateDetailElement(data));
 
     }
   }
@@ -111,7 +118,6 @@ const sanity = "You're not insane!";
     } else if (data.title) {
       detailElement = document.createElement('li');
       detailElement.innerHTML = data.title;
-      console.log(detailElement);
 
     }
 
@@ -124,8 +130,9 @@ const sanity = "You're not insane!";
   function generateListElement(data, trait) {
     let dataList = data[idSelected][trait];
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < dataList.length; i++) {
       retrieveAPI(dataList[i]);
+
     }
   }
 

@@ -6,13 +6,17 @@ const sanity = "You're not insane!";
 
 (function episodeTwo() {
 
+  window.addEventListener('error', function() {
+    invalidInput();
+  }, true);
+
   const resourceType = document.getElementById("resourceType");
   const resourceId = document.getElementById("resourceId");
   const requestResourceButton = document.getElementById("requestResourceButton");
   const contentContainer = document.getElementById('contentContainer');
   const unorderedListElement = document.createElement('ul');
   
-  let typeSelected, idSelected, pageNumber;
+  let typeSelected, idSelected, uniqueValue, pageNumber;
 
   ///// ASYNC HANDLING FUNCTIONS /////
 
@@ -25,11 +29,16 @@ const sanity = "You're not insane!";
     pageNumber = undefined;
 
     typeSelected = document.getElementById("resourceType").value;
-    idSelected = document.getElementById("resourceId").value - 1;
+    idSelected = document.getElementById("resourceId").value;
+    uniqueValue = idSelected;
 
-    if (idSelected >= 10) {
-      pageNumber = Math.floor(idSelected / 10) + 1;
-      idSelected %= 10;
+    if (!isNaN(idSelected)) {
+      idSelected -= 1;
+  
+      if (idSelected >= 10) {
+        pageNumber = Math.floor(idSelected / 10) + 1;
+        idSelected %= 10;
+      }
     }
     
     retrieveAPI("https://swapi.co/api/");
@@ -38,14 +47,19 @@ const sanity = "You're not insane!";
   // opens the request for the data from the provided URL
   function retrieveAPI(url) {
     let apiRequest = new XMLHttpRequest();
-    apiRequest.addEventListener("load", requestListener());
+    apiRequest.addEventListener("load", requestListener(url));
     apiRequest.open("GET", url);
     apiRequest.send();
   }
 
   // parses JSON document and returns data
-  function requestListener() { // this is the event handler
+  function requestListener(url) { // this is the event handler
     return function() {
+      if (this.status === 404) {
+        invalidInput();
+        return 'ERROR!';
+      }
+
       let parsedDocument = JSON.parse(this.responseText);
       console.log('parsed:', parsedDocument);
 
@@ -144,6 +158,15 @@ const sanity = "You're not insane!";
       retrieveAPI(dataList[i]);
 
     }
+  }
+
+  ///// ERROR HANDLING FUNCTION /////
+  
+  function invalidInput() {
+    errorElement = document.createElement('div');
+    errorElement.style.backgroundColor = '#E30022';
+    errorElement.innerHTML = `ERROR! https://swapi.co/api/${typeSelected}/${uniqueValue} NOT FOUND!`;
+    contentContainer.appendChild(errorElement);
   }
 
 })(window);

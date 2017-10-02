@@ -12,7 +12,7 @@ const sanity = "You're not insane!";
   const contentContainer = document.getElementById('contentContainer');
   const unorderedListElement = document.createElement('ul');
   
-  let typeSelected, idSelected;
+  let typeSelected, idSelected, pageNumber;
 
   ///// ASYNC HANDLING FUNCTIONS /////
 
@@ -22,8 +22,16 @@ const sanity = "You're not insane!";
   // selects the option taken by user
   function resourceSelector() {
     contentContainer.innerHTML = '';
+    pageNumber = undefined;
+
     typeSelected = document.getElementById("resourceType").value;
-    idSelected = document.getElementById("resourceId").value;
+    idSelected = document.getElementById("resourceId").value - 1;
+
+    if (idSelected >= 10) {
+      pageNumber = Math.floor(idSelected / 10) + 1;
+      idSelected %= 10;
+    }
+    
     retrieveAPI("https://swapi.co/api/");
   }
 
@@ -46,7 +54,9 @@ const sanity = "You're not insane!";
         informationSorter(parsedDocument);
       
       } else {
-        retrieveAPI(parsedDocument[typeSelected]);
+
+        if (pageNumber) retrieveAPI(parsedDocument[typeSelected] + `?page=${pageNumber}`);
+        else retrieveAPI(parsedDocument[typeSelected]);
 
       }
     };
